@@ -14,7 +14,7 @@ url = URL.create(
     "postgresql+psycopg2",
     username="forecast",
     password=os.getenv("DB_PASSWORD"),
-    host="localhost",
+    host=os.getenv("DB_HOST", "localhost"),
     port=5432,
     database="forecast",
 )
