@@ -16,3 +16,10 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t demand-forecast-api .
