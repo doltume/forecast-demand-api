@@ -66,3 +66,10 @@ with engine.begin() as conn:
         ),
         {"v": "lightgbm_v1", "mae": float(mae), "rmse": float(rmse)},
     )
+
+
+import joblib
+
+os.makedirs("models", exist_ok=True)
+joblib.dump({"model": model, "features": features}, "models/lightgbm_v1.joblib")
+print("Model saved in models/lightgbm_v1.joblib")
