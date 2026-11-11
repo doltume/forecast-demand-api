@@ -10,15 +10,21 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
 
 load_dotenv()
-url = URL.create(
-    "postgresql+psycopg2",
-    username="forecast",
-    password=os.getenv("DB_PASSWORD"),
-    host=os.getenv("DB_HOST", "localhost"),
-    port=5432,
-    database="forecast",
-)
-engine = create_engine(url)
+database_url = os.getenv("DATABASE_URL")
+if database_url:
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+    database_url = database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    engine = create_engine(database_url, pool_pre_ping=True)
+else:
+    url = URL.create(
+        "postgresql+psycopg2",
+        username="forecast",
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST", "localhost"),
+        port=5432,
+        database="forecast",
+    )
+    engine = create_engine(url)
 
 bundle = joblib.load("models/lightgbm_v1.joblib")
 model = bundle["model"]
